@@ -1,19 +1,17 @@
-# ======================
-# task2_pose_estimation.py (Generated Variable Style)
-# ======================
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# Load previously saved calibration data
-CalibrationData = np.load('generatedCameraCalibrationData.npz')
-GeneratedCameraMatrix = CalibrationData['GeneratedCameraMatrix']
-GeneratedDistortionCoefficients = CalibrationData['GeneratedDistortionCoefficients']
+# Loading the saved calibration data from earlier
 
-# Simulated object points (3D) and corresponding image points (2D)
-ObjectPointsSim = np.array([
+generatedCalibrationData  = np.load('generatedCameraCalibrationData.npz')
+generatedCameraMatrix = generatedCalibrationData['generatedCameraMatrix']
+generatedDistortionCoefficients = generatedCalibrationData['generatedDistortionCoefficients']
+
+# Object points in 3D with corresponding image points in 2D
+
+objectPointsSimulation = np.array([
     [0, 0, 0],
     [1, 0, 0],
     [1, 1, 0],
@@ -24,7 +22,7 @@ ObjectPointsSim = np.array([
     [0, 1, -1]
 ], dtype=np.float32)
 
-ImagePointsSim = np.array([
+imagePointsSimulation = np.array([
     [150, 150],
     [400, 150],
     [400, 400],
@@ -35,54 +33,50 @@ ImagePointsSim = np.array([
     [170, 380]
 ], dtype=np.float32)
 
-# SolvePnP to estimate pose
-PoseEstimationSuccessFlag, GeneratedRotationVector, GeneratedTranslationVector = cv2.solvePnP(
-    ObjectPointsSim,
-    ImagePointsSim,
-    GeneratedCameraMatrix,
-    GeneratedDistortionCoefficients
+# Using the solvePnP function to estimate the pose
+generatedPoseEstimationSuccessFlag, generatedRotationalVectorValue, generatedTranslationalVectorValue = cv2.solvePnP(
+    objectPointsSimulation,
+    imagePointsSimulation,
+    generatedCameraMatrix,
+    generatedDistortionCoefficients
 )
 
-# Convert rotation vector to rotation matrix
-GeneratedRotationMatrix, _ = cv2.Rodrigues(GeneratedRotationVector)
+# Converting the rotational vector to a rotational matrix
+generatedRotationalMatrix, _ = cv2.Rodrigues(generatedRotationalVectorValue)
 
-print("\n✅ Pose Estimation Completed")
-print("\nGenerated Rotation Matrix:\n", GeneratedRotationMatrix)
-print("\nGenerated Translation Vector:\n", GeneratedTranslationVector)
+print("\nPose Estimation Completed")
+print("\The following rotation matrix:\n", generatedRotationalMatrix)
+print("\The following translational vector:\n", generatedTranslationalVectorValue)
 
-# =======================
-# ArUco Marker Detection Example
-# =======================
+# Dictionary and parameters for aruco detection
+generatedArucoDictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
+generatedArucoParameters = cv2.aruco.DetectorParameters()
+generatedArucoDetector = cv2.aruco.ArucoDetector(generatedArucoDictionary, generatedArucoParameters)
 
-# Create dictionary and parameters for ArUco detection
-GeneratedArucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
-GeneratedArucoParams = cv2.aruco.DetectorParameters()
-GeneratedArucoDetector = cv2.aruco.ArucoDetector(GeneratedArucoDict, GeneratedArucoParams)
+# Reading a sample image from the checkerboard
+imagePathValue = './checkerboard-images/sample_marker.jpg'  # Place an image here manually
+if os.path.exists(imagePathValue):
+    generatedImageValue = cv2.imread(imagePathValue)
+    generatedGrayImage = cv2.cvtColor(generatedImageValue, cv2.COLOR_BGR2GRAY)
 
-# Read a sample image
-SampleImagePath = './checkerboard-images/sample_marker.jpg'  # Place an image here manually
-if os.path.exists(SampleImagePath):
-    GeneratedSampleImage = cv2.imread(SampleImagePath)
-    GeneratedGraySampleImage = cv2.cvtColor(GeneratedSampleImage, cv2.COLOR_BGR2GRAY)
+    cornersFound, detectionIDS, _ = generatedArucoDetector.detectMarkers(generatedGrayImage)
 
-    CornersDetected, IDsDetected, _ = GeneratedArucoDetector.detectMarkers(GeneratedGraySampleImage)
-
-    if len(CornersDetected) > 0:
-        RetVal, Rvecs, Tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-            CornersDetected,
-            0.05,  # Marker length (adjust as needed)
-            GeneratedCameraMatrix,
-            GeneratedDistortionCoefficients
+    if len(cornersFound) > 0:
+        rValue, rVectors, tVecs, _ = cv2.aruco.estimatePoseSingleMarkers(
+            cornersFound,
+            0.05,
+            generatedCameraMatrix,
+            generatedDistortionCoefficients
         )
-        for i in range(len(IDsDetected)):
+        for i in range(len(detectionIDS)):
             cv2.drawFrameAxes(GeneratedSampleImage, GeneratedCameraMatrix, GeneratedDistortionCoefficients, Rvecs[i], Tvecs[i], 0.1)
 
         plt.figure(figsize=(8,6))
-        plt.imshow(cv2.cvtColor(GeneratedSampleImage, cv2.COLOR_BGR2RGB))
-        plt.title("Generated ArUco Marker Pose Estimation")
+        plt.imshow(cv2.cvtColor(generatedImageValue, cv2.COLOR_BGR2RGB))
+        plt.title("Aruco Marker Pose Estimation Value")
         plt.axis('off')
         plt.show()
     else:
-        print("\n⚠️ No ArUco markers detected.")
+        print("\nAruco markers were not detected.")
 else:
-    print("\n⚠️ Sample image for ArUco detection not found.")
+    print("\nAruco detection sample image not found.")
