@@ -33,7 +33,7 @@ where $K$ is the Intrinsic Camera Matrix.$R, t$ are the Rotation and Translation
 
 ## Dependencies
 
-- Python 3.
+- Python 3.x
 - OpenCV (opencv-contrib-python
 - NumPy
 - Matplotlib
