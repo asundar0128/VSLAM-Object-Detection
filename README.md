@@ -67,5 +67,7 @@ graph LR
 ## Installation
 
 git clone https://github.com/asundar0128/VSLAM-Object-Detection.git
+
 cd VSLAM-Object-Detection
+
 pip install -r requirements.txt
