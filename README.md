@@ -25,33 +25,7 @@ where $K$ is the Intrinsic Camera Matrix.$R, t$ are the Rotation and Translation
 
 ## System Architecture
 
-```mermaid
-graph LR
-    subgraph Input_Layer [Input Layer]
-        A[Camera Feed] --> C
-        B[KITTI Dataset] --> C
-    end
-
-    subgraph Preprocessing [Preprocessing]
-        C[Calibration & Undistortion] --> D[Feature Extraction]
-        D --> E{Tracking & Detection}
-    end
-
-    subgraph Logic [Core Modules]
-        E --> F[ArUco Module]
-        E --> G[ORB/SIFT Feature Module]
-    end
-
-    subgraph Output [Mapping & Visualization]
-        F --> H[Pose Estimation]
-        G --> H
-        H --> I[Trajectory Accumulation]
-        I --> J[2D/3D Plotting]
-    end
-
-    style Input_Layer fill:#f9f,stroke:#333,stroke-width:2px
-    style Output fill:#bbf,stroke:#333,stroke-width:2px
-```
+![System Architecture](https://github.com/user-attachments/assets/b5aa06f2-f231-4f63-974e-3310da552e5e)
 
 ## Project Structure
 
