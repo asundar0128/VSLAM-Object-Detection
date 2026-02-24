@@ -23,7 +23,49 @@ $$\sum_{i} \| u_i - \text{project}(P_i; R, t, K) \|^2$$
 
 where $K$ is the Intrinsic Camera Matrix.$R, t$ are the Rotation and Translation vectors.
 
+## System Architecture
+
+```mermaid
+graph LR
+    subgraph Input_Layer [Input Layer]
+        A[Camera Feed] --> C
+        B[KITTI Dataset] --> C
+    end
+
+    subgraph Preprocessing [Preprocessing]
+        C[Calibration & Undistortion] --> D[Feature Extraction]
+        D --> E{Tracking & Detection}
+    end
+
+    subgraph Logic [Core Modules]
+        E --> F[ArUco Module]
+        E --> G[ORB/SIFT Feature Module]
+    end
+
+    subgraph Output [Mapping & Visualization]
+        F --> H[Pose Estimation]
+        G --> H
+        H --> I[Trajectory Accumulation]
+        I --> J[2D/3D Plotting]
+    end
+
+    style Input_Layer fill:#f9f,stroke:#333,stroke-width:2px
+    style Output fill:#bbf,stroke:#333,stroke-width:2px
+```
+
 ## Project Structure
 
 <img width="361" height="210" alt="Project Structure" src="https://github.com/user-attachments/assets/e92a9b55-ac00-429f-86d5-064724eb481c" />
 
+## Dependencies
+
+- Python 3.
+- OpenCV (opencv-contrib-python
+- NumP
+- Matplotlib
+
+## Installation
+
+git clone https://github.com/asundar0128/VSLAM-Object-Detection.git
+cd VSLAM-Object-Detection
+pip install -r requirements.txt
