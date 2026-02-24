@@ -35,7 +35,7 @@ where $K$ is the Intrinsic Camera Matrix.$R, t$ are the Rotation and Translation
 
 - Python 3.
 - OpenCV (opencv-contrib-python
-- NumP
+- NumPy
 - Matplotlib
 
 ## Installation
